@@ -493,6 +493,7 @@ class SKY130Tech(HammerTechnology):
         self.setup_calibre_lvs_deck()
         print("Loaded Sky130 Tech")
 
+    # TODO(elamdf): looks like calibre crashes with -turbo 32 on an sky130_scl design, no idea why
     def setup_calibre_lvs_deck(self) -> bool:
         # Remove conflicting specification statements found in PDK LVS decks
         pattern = ".*({}).*\n".format("|".join(LVS_DECK_SCRUB_LINES))
@@ -1186,6 +1187,7 @@ def pegasus_drc_blackbox_srams(ht: HammerTool) -> bool:
     with open(run_file, "a") as f:
         f.write(drc_box)
     return True
+
 
 
 def calibre_lvs_blackbox_srams(ht: HammerTool) -> bool:
