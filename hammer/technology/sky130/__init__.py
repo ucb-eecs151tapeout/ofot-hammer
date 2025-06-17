@@ -227,7 +227,7 @@ class SKY130Tech(HammerTechnology):
                     deck_name=f"{self.get_setting('vlsi.core.drc_tool').replace('hammer.drc.', '')}_drc",
                     path=path,
                 )
-                for path in self.get_setting("technology.sky130.sky130_drc_decks")
+                for path in self.get_setting("technology.sky130.drc_deck_sources")
             ]
 
         elif slib == "sky130_scl":
@@ -299,7 +299,7 @@ class SKY130Tech(HammerTechnology):
                     deck_name=f"{self.get_setting('vlsi.core.drc_tool').replace('hammer.drc.', '')}_drc",
                     path=path,
                 )
-                for path in self.get_setting("technology.sky130.sky130_drc_decks")
+                for path in self.get_setting("technology.sky130.drc_deck_sources")
             ]
 
         else:
