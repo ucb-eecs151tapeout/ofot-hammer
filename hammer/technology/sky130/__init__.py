@@ -221,20 +221,13 @@ class SKY130Tech(HammerTechnology):
             ]
             drc_decks = [
                 DRCDeck(
-                    tool_name="calibre",
-                    deck_name="calibre_drc",
-                    path="$SKY130_NDA/s8/V2.0.1/DRC/Calibre/s8_drcRules",
-                ),
-                DRCDeck(
-                    tool_name="klayout",
-                    deck_name="klayout_drc",
-                    path="$SKY130A/libs.tech/klayout/drc/sky130A.lydrc",
-                ),
-                DRCDeck(
-                    tool_name="pegasus",
-                    deck_name="pegasus_drc",
-                    path="$SKY130_CDS/Sky130_DRC/sky130_rev_0.0_2.2.drc.pvl",
-                ),
+                    tool_name=self.get_setting("vlsi.core.drc_tool").replace(
+                        "hammer.drc.", ""
+                    ),
+                    deck_name=f"{self.get_setting('vlsi.core.drc_tool').replace('hammer.drc.', '')}_drc",
+                    path=path,
+                )
+                for path in self.get_setting("technology.sky130.drc_deck_sources")
             ]
 
         elif slib == "sky130_scl":
@@ -300,17 +293,13 @@ class SKY130Tech(HammerTechnology):
             ]
             drc_decks = [
                 DRCDeck(
-                    tool_name="calibre",
-                    deck_name="calibre_drc",
-                    path="$SKY130_NDA/s8/V2.0.1/DRC/Calibre/s8_drcRules",
-                ),
-                DRCDeck(
-                    tool_name="pegasus",
-                    deck_name="pegasus_drc",
-                    path=os.path.join(
-                        SKY130_CDS, "Sky130_DRC", "sky130_rev_0.0_2.2.drc.pvl"
+                    tool_name=self.get_setting("vlsi.core.drc_tool").replace(
+                        "hammer.drc.", ""
                     ),
-                ),
+                    deck_name=f"{self.get_setting('vlsi.core.drc_tool').replace('hammer.drc.', '')}_drc",
+                    path=path,
+                )
+                for path in self.get_setting("technology.sky130.drc_deck_sources")
             ]
 
         else:
@@ -850,6 +839,11 @@ class SKY130Tech(HammerTechnology):
                 "generate_drc_ctl_file", pegasus_drc_blackbox_io_cells
             )
         )
+        pegasus_hooks.append(
+            HammerTool.make_post_insertion_hook(
+                "generate_drc_ctl_file", false_rules_off
+            )
+        )
         hooks = {"calibre": calibre_hooks, "pegasus": pegasus_hooks}
         return hooks.get(tool_name, [])
 
@@ -1149,8 +1143,6 @@ def pegasus_drc_blackbox_io_cells(ht: HammerTool) -> bool:
         f.write(drc_box)
     return True
 
-<<<<<<< Updated upstream
-=======
 def false_rules_off(x: HammerTool) -> bool:
     # in sky130_rev_0.0_2.3 rules, cadence included a .cfg to turn off false rules - this typically has to be loaded via the GUI but this step hacks the flags into pegasusdrcctl and turns the false rules off
     # if FALSEOFF is defined, the rules are turned off
@@ -1180,7 +1172,6 @@ def false_rules_off(x: HammerTool) -> bool:
     with open(run_file, "a") as f:
         f.write(drc_box)
     return True
->>>>>>> Stashed changes
 
 def pegasus_drc_blackbox_srams(ht: HammerTool) -> bool:
     assert isinstance(ht, HammerDRCTool), "Exlude SRAMs only in DRC"

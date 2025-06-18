@@ -28,6 +28,8 @@ technology.sky130:
   
   pdk_home: "${technology.sky130.sky130_nda}/s8/V2.0.1" # Shouldn't need to change these
   pdk_home_meta: lazysubst
+  drc_deck_sources: # DRC decks, one element for each deck
+    - "${technology.sky130.sky130_cds}/Sky130_DRC/sky130_rev_0.0_2.6.drc.pvl"
   lvs_deck_sources: 
     - "${technology.sky130.pdk_home}/LVS/Calibre/lvsControlFile_s8"
   lvs_deck_sources_meta: lazysubst
