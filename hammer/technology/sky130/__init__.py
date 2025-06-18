@@ -1149,6 +1149,38 @@ def pegasus_drc_blackbox_io_cells(ht: HammerTool) -> bool:
         f.write(drc_box)
     return True
 
+<<<<<<< Updated upstream
+=======
+def false_rules_off(x: HammerTool) -> bool:
+    # in sky130_rev_0.0_2.3 rules, cadence included a .cfg to turn off false rules - this typically has to be loaded via the GUI but this step hacks the flags into pegasusdrcctl and turns the false rules off
+    # if FALSEOFF is defined, the rules are turned off
+    # docs for hooks: /scratch/ee198-20-aaf/barduino-ofot/vlsi/hammer/hammer/drc/pegasus/README.md
+
+    # Version 0.0_2.7  June 13, 2025
+    drc_box = """
+//=== Configurator controls ===
+#DEFINE FALSEOFF
+//      (these rules are on by default and may produce false violations)
+#DEFINE SRAM
+// These are the affected rules and alternate implementation: 
+//    licon.4a: licon in areaid.ce must overlap LI
+//    licon.4b: licon in areaid.ce must overlap (poly or diff or tap)
+//    mcon.cover.1: mcon in areaid.ce must overlap LI
+// ** WARNING: This switch is for debugging purposes only, errors may be missed **
+#DEFINE NODEN
+//  Recommended Rules (RC,RR) & Guidelines (NC)
+#UNDEFINE RC
+#UNDEFINE NC
+//  Optional Switches 
+#UNDEFINE frontend
+#UNDEFINE backend
+//=== End of configurator controls ===
+    """
+    run_file = x.drc_ctl_file  # type: ignore
+    with open(run_file, "a") as f:
+        f.write(drc_box)
+    return True
+>>>>>>> Stashed changes
 
 def pegasus_drc_blackbox_srams(ht: HammerTool) -> bool:
     assert isinstance(ht, HammerDRCTool), "Exlude SRAMs only in DRC"
