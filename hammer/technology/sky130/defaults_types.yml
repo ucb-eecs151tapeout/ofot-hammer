@@ -27,6 +27,7 @@ technology.sky130:
 
   # Shouldn't need to change these
   pdk_home: Optional[str]
+  drc_deck_sources: Optional[list[str]]
   lvs_deck_sources: Optional[list[str]]
 
   # Path to IO file
