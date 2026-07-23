@@ -439,6 +439,10 @@ if {{ {get_db_str} ne "" }} {{
             output_paths = [] #  type: List[Dict[str,str]]
             assert isinstance(reg_paths, List), "Output find_regs_paths.json should be a json list of strings"
             for i in range(len(reg_paths)):
+                # Already-processed entries are dicts (file is rewritten in place,
+                # so redo runs would otherwise crash on .split)
+                if isinstance(reg_paths[i], dict):
+                    continue
                 split = reg_paths[i].split("/")
                 # If the net is part of a generate block, the generated names have a "." in them and the whole name
                 # needs to be escaped.
