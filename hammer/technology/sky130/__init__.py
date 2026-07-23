@@ -1239,10 +1239,11 @@ def pegasus_lvs_blackbox(ht: HammerTool) -> bool:
         contents = f.read()
         fixed_contents = matcher.sub("", contents)
 
-        # Replace layout_path line (FIXME)
+        # Replace layout_path line with this run's actual layout file
+        # (was hardcoded to a stale /scratch/jfx/barduino-ofot path)
         fixed_contents = re.sub(
             r'layout_path\s+".*?";',
-            'layout_path "/scratch/jfx/barduino-ofot/vlsi/build/chipyard.harness.TestHarness.BarduinoConfig-ChipTop/par-rundir/ChipTop_drc_lvs.gds";',
+            f'layout_path "{ht.layout_file}";',
             fixed_contents,
         )
 
